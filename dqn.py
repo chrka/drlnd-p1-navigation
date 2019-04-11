@@ -55,7 +55,7 @@ def dqn(n_episodes=2000, max_t=1000, eps_start=1.0, eps_end=0.01,
             print('\rEpisode {}\tAverage Score: {:.2f}'.format(i_episode,
                                                                np.mean(
                                                                    scores_window)))
-        if np.mean(scores_window) >= 200.0:
+        if np.mean(scores_window) >= 300.0:
             print(
                 '\nEnvironment solved in {:d} episodes!\tAverage Score: {:.2f}'.format(
                     i_episode - 100, np.mean(scores_window)))
@@ -82,9 +82,9 @@ plt.show()
 # load the weights from file
 agent.local_network.load_state_dict(torch.load('checkpoint.pth'))
 
-for i in range(5):
+for i in range(10):
     state = env.reset()
-    for j in range(200):
+    for j in range(300):
         action = agent.act(state)
         env.render()
         state, reward, done, _ = env.step(action)
