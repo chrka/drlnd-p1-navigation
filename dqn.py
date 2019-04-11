@@ -17,7 +17,7 @@ print('Number of actions: ', env.action_space.n)
 from agent import Agent
 
 device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
-agent = Agent(state_size=8, action_size=4, device=device)
+agent = Agent(state_size=8, action_size=4, device=device, layer1=64, layer2=64)
 
 
 def dqn(n_episodes=2000, max_t=1000, eps_start=1.0, eps_end=0.01,

@@ -16,7 +16,8 @@ class Agent():
     def __init__(self, state_size, action_size, device,
                  replay_buffer_size=int(1e5), batch_size=64,
                  discount_factor=0.99, soft_update=1e-3,
-                 learning_rate=5e-4, update_every=4):
+                 learning_rate=5e-4, update_every=4,
+                 **kwargs):
         """Initializes the DQN agent.
 
         Args:
@@ -29,6 +30,7 @@ class Agent():
             soft_update (float): Soft update coefficient (tau)
             learning_rate (float): Learning rate (alpha)
             update_every (int): Steps between updating the network
+            **kwargs: Arguments describing the QNetwork
         """
         self.state_size = state_size
         """Dimension of each state"""
@@ -53,10 +55,12 @@ class Agent():
         """Steps between updating the network"""
 
         # Q Networks
-        self.target_network = QNetwork(state_size, action_size).to(device)
+        self.target_network = QNetwork(state_size, action_size, **kwargs)\
+            .to(device)
         """Target Q-Network"""
 
-        self.local_network = QNetwork(state_size, action_size).to(device)
+        self.local_network = QNetwork(state_size, action_size, **kwargs)\
+            .to(device)
         """Local Q-Network"""
 
         self.optimizer = optim.Adam(self.local_network.parameters(),
