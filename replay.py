@@ -12,7 +12,7 @@ Experience = namedtuple("Experience",
 """Experience tuple."""
 
 
-class ReplayBuffer:
+class ReplayBuffer(object):
     """Fixed-size buffer for storing experience tuples."""
 
     def __init__(self, buffer_size, batch_size, device):

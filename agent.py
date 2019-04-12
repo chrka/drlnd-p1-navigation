@@ -10,7 +10,7 @@ from model import QNetwork
 from replay import ReplayBuffer
 
 
-class Agent():
+class Agent(object):
     """DQN Agent that interacts and learns from the environment."""
 
     def __init__(self, state_size, action_size, device,
