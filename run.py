@@ -6,6 +6,13 @@ from agent import Agent
 
 
 def run(env, agent, n_episodes):
+    """Run a pre-trained agent.
+
+    Args:
+        env (UnityEnvironment): Environment to run agent in
+        agent (Agent): Agent to run
+        n_episodes (int): Number of episodes to run
+    """
     # Assume we're operating brain 0
     brain_name = env.brain_names[0]
     brain = env.brains[brain_name]

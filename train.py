@@ -1,3 +1,4 @@
+import random
 from collections import deque
 
 import click
@@ -5,13 +6,25 @@ import matplotlib.pyplot as plt
 import numpy as np
 import torch
 from unityagents import UnityEnvironment
-import random
+
 from agent import Agent
 
 
 def train(env, agent, weight_path, n_episodes=3000, eps_start=1.0,
           eps_min=0.01,
           eps_decay=0.999, threshold=13.0):
+    """Train agent and store weights if successful.
+
+    Args:
+        env (UnityEnvironment): Environment to train agent in
+        agent (Agent): Agent to train
+        weight_path (str): Path for weights file
+        n_episodes (int): Max number of episodes to train agent for
+        eps_start (float): Initial epsilon value
+        eps_min (float): Minimum value of epsilon value
+        eps_decay (float): Epsilon decay factor
+        threshold (float): Min mean score over 100 episodes consider success
+    """
     # Assume we're operating brain 0
     brain_name = env.brain_names[0]
     brain = env.brains[brain_name]
@@ -60,18 +73,23 @@ def train(env, agent, weight_path, n_episodes=3000, eps_start=1.0,
 @click.option('--seed', type=int, help="Random seed")
 def main(environment, layer1, layer2, eps_decay, eps_min,
          plot_output, weights_output, seed):
-
+    # Set seed if given to help with reproducibility
     if seed:
         print(f"Using seed {seed}")
         random.seed(seed)
         torch.random.manual_seed(seed)
 
+    # Initialize Unity environment from external file
     env = UnityEnvironment(file_name=environment)
 
+    # Use CUDA if available, cpu otherwise
     device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
+
+    # Create agent given model parameters
     agent = Agent(state_size=37, action_size=4, device=device, layer1=layer1,
                   layer2=layer2)
 
+    # Train agent (will save weights if successful)
     scores = train(env, agent, weights_output,
                    eps_decay=eps_decay, eps_min=eps_min)
 
