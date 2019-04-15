@@ -20,8 +20,10 @@ def run(env, agent, n_episodes):
             step += 1
             action = agent.act(state)
             env_info = env.step(action)[brain_name]
+            next_state = env_info.vector_observations[0]
             reward = env_info.rewards[0]
             done = env_info.local_done[0]
+            state = next_state
             score += reward
             print(f"\rStep: {step:3d}\tScore {score}", end="")
             if done:
