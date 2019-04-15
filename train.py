@@ -47,15 +47,17 @@ def train(env, agent, weight_path, n_episodes=3000, eps_start=1.0,
 
 
 @click.command()
-@click.option('--environment', default="Banana.app",
-              help="Path to Unity environment")
+@click.option('--environment', required=True,
+              help="Path to Unity environment", type=click.Path())
 @click.option('--layer1', default=32, help="Number of units in input layer")
 @click.option('--layer2', default=32, help="Number of units in hidden layer")
 @click.option('--eps-decay', default=0.999, help="Epsilon decay factor")
 @click.option('--eps-min', default=0.01, help="Minimum value of epsilon")
-@click.option('--plot-output', default="score.png")
-@click.option('--weights-output', default='weights.pth')
-@click.option('--seed', type=int)
+@click.option('--plot-output', default="score.png",
+              help="Output file for score plot", type=click.Path())
+@click.option('--weights-output', default='weights.pth',
+              help="File to save weights to after success", type=click.Path())
+@click.option('--seed', type=int, help="Random seed")
 def main(environment, layer1, layer2, eps_decay, eps_min,
          plot_output, weights_output, seed):
 
@@ -75,6 +77,7 @@ def main(environment, layer1, layer2, eps_decay, eps_min,
 
     env.close()
 
+    # Generate score plot
     plt.plot(np.arange(len(scores)), scores)
     plt.ylabel('Score')
     plt.xlabel('Episode')

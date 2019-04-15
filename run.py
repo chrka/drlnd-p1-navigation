@@ -34,12 +34,13 @@ def run(env, agent, n_episodes):
 
 
 @click.command()
-@click.option('--environment', default="Banana.app",
-              help="Path to Unity environment")
+@click.option('--environment', required=True,
+              help="Path to Unity environment", type=click.Path())
 @click.option('--layer1', default=32, help="Number of units in input layer")
 @click.option('--layer2', default=32, help="Number of units in hidden layer")
 @click.option('--n-episodes', default=3, help="Number of episodes to run")
-@click.option('--weights-input', default='weights.pth')
+@click.option('--weights-input', default='weights.pth', help="Network weights",
+              type=click.Path())
 def main(environment, layer1, layer2, n_episodes, weights_input):
     env = UnityEnvironment(file_name=environment)
 
