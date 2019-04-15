@@ -55,11 +55,11 @@ class Agent(object):
         """Steps between updating the network"""
 
         # Q Networks
-        self.target_network = QNetwork(state_size, action_size, **kwargs)\
+        self.target_network = QNetwork(state_size, action_size, **kwargs) \
             .to(device)
         """Target Q-Network"""
 
-        self.local_network = QNetwork(state_size, action_size, **kwargs)\
+        self.local_network = QNetwork(state_size, action_size, **kwargs) \
             .to(device)
         """Local Q-Network"""
 
