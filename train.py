@@ -5,7 +5,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 import torch
 from unityagents import UnityEnvironment
-
+import random
 from agent import Agent
 
 
@@ -55,8 +55,15 @@ def train(env, agent, weight_path, n_episodes=3000, eps_start=1.0,
 @click.option('--eps-min', default=0.01, help="Minimum value of epsilon")
 @click.option('--plot-output', default="score.png")
 @click.option('--weights-output', default='weights.pth')
+@click.option('--seed', type=int)
 def main(environment, layer1, layer2, eps_decay, eps_min,
-         plot_output, weights_output):
+         plot_output, weights_output, seed):
+
+    if seed:
+        print(f"Using seed {seed}")
+        random.seed(seed)
+        torch.random.manual_seed(seed)
+
     env = UnityEnvironment(file_name=environment)
 
     device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
