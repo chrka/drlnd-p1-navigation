@@ -1,15 +1,16 @@
 from collections import deque
 
-import numpy as np
+import click
 import matplotlib.pyplot as plt
+import numpy as np
 import torch
 from unityagents import UnityEnvironment
 
 from agent import Agent
 
 
-def dqn(env, agent: Agent, n_episodes=3000, eps_start=1.0, eps_min=0.01,
-        eps_decay=0.999):
+def train(env, agent: Agent, n_episodes=3000, eps_start=1.0, eps_min=0.01,
+          eps_decay=0.999):
     # Assume we're operating brain 0
     brain_name = env.brain_names[0]
     brain = env.brains[brain_name]
@@ -36,27 +37,40 @@ def dqn(env, agent: Agent, n_episodes=3000, eps_start=1.0, eps_min=0.01,
         score_window.append(score)
         scores.append(score)
         eps = max(eps_min, eps_decay * eps)
-        line_end = "\n" if i % 100 == 0 else ""
         print(f"\rEpisode {i}\tAverage score {np.mean(score_window):.2f}",
-              end=line_end)
+              end="\n" if i % 100 == 0 else "")
         if np.mean(score_window) > 13.0:
             print(f"\nEnvironment solved in {i} episodes.")
             break
     return scores
 
 
-if __name__ == '__main__':
-    env = UnityEnvironment(file_name="Banana.app")
+@click.command()
+@click.option('--environment', default="Banana.app",
+              help="Path to Unity environmnent")
+@click.option('--layer1', default=32, help="Number of units in input layer")
+@click.option('--layer2', default=32, help="Number of units in hidden layer")
+@click.option('--eps-decay', default=0.999, help="Epsilon decay factor")
+@click.option('--eps-min', default=0.01, help="Minimum value of epsilon")
+@click.option('--plot-output', default="score.png")
+@click.option('--weights-output', default='weights.pth')
+def main(environment, layer1, layer2, eps_decay, eps_min,
+         plot_output, weights_output):
+    env = UnityEnvironment(file_name=environment)
 
     device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
-    agent = Agent(state_size=37, action_size=4, device=device, layer1=128,
-                  layer2=96)
+    agent = Agent(state_size=37, action_size=4, device=device, layer1=layer1,
+                  layer2=layer2)
 
-    scores = dqn(env, agent)
+    scores = train(env, agent, eps_decay=eps_decay, eps_min=eps_min)
 
     env.close()
 
     plt.plot(np.arange(len(scores)), scores)
     plt.ylabel('Score')
     plt.xlabel('Episode')
-    plt.show()
+    plt.savefig(plot_output)
+
+
+if __name__ == '__main__':
+    main()
