@@ -21,6 +21,20 @@ class QNetwork(nn.Module):
         self.fc2 = nn.Linear(layer1, layer2)
         self.fc3 = nn.Linear(layer2, action_size)
 
+    def save_weights(self, path):
+        """Save network weights.
+
+        Args:
+            path (string): File to save to"""
+        torch.save(self.state_dict(), path)
+
+    def load_weights(self, path):
+        """Load network weights.
+
+        Args:
+            path (string): File to load weights from"""
+        self.load_state_dict(torch.load(path))
+
     def forward(self, state):
         """Maps state to action values
 

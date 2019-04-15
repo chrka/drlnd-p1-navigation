@@ -74,6 +74,20 @@ class Agent(object):
         self.t_step = 0
         """Current time step"""
 
+    def save_weights(self, path):
+        """Save local network weights.
+
+        Args:
+            path (string): File to save to"""
+        self.local_network.save_weights(path)
+
+    def load_weights(self, path):
+        """Load local network weights.
+
+        Args:
+            path (string): File to load weights from"""
+        self.local_network.load_weights(path)
+
     def act(self, state, eps=0.):
         """Returns action for given state according to the current policy
             

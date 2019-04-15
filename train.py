@@ -9,8 +9,9 @@ from unityagents import UnityEnvironment
 from agent import Agent
 
 
-def train(env, agent: Agent, n_episodes=3000, eps_start=1.0, eps_min=0.01,
-          eps_decay=0.999):
+def train(env, agent: Agent, weight_path, n_episodes=3000, eps_start=1.0,
+          eps_min=0.01,
+          eps_decay=0.999, threshold=13.0):
     # Assume we're operating brain 0
     brain_name = env.brain_names[0]
     brain = env.brains[brain_name]
@@ -39,8 +40,9 @@ def train(env, agent: Agent, n_episodes=3000, eps_start=1.0, eps_min=0.01,
         eps = max(eps_min, eps_decay * eps)
         print(f"\rEpisode {i}\tAverage score {np.mean(score_window):.2f}",
               end="\n" if i % 100 == 0 else "")
-        if np.mean(score_window) > 13.0:
+        if len(score_window) >= 100 and np.mean(score_window) > threshold:
             print(f"\nEnvironment solved in {i} episodes.")
+            agent.save_weights(weight_path)
             break
     return scores
 
@@ -62,7 +64,8 @@ def main(environment, layer1, layer2, eps_decay, eps_min,
     agent = Agent(state_size=37, action_size=4, device=device, layer1=layer1,
                   layer2=layer2)
 
-    scores = train(env, agent, eps_decay=eps_decay, eps_min=eps_min)
+    scores = train(env, agent, weights_output,
+                   eps_decay=eps_decay, eps_min=eps_min)
 
     env.close()
 
