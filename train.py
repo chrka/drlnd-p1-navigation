@@ -48,7 +48,7 @@ def train(env, agent, weight_path, n_episodes=3000, eps_start=1.0,
 
 @click.command()
 @click.option('--environment', default="Banana.app",
-              help="Path to Unity environmnent")
+              help="Path to Unity environment")
 @click.option('--layer1', default=32, help="Number of units in input layer")
 @click.option('--layer2', default=32, help="Number of units in hidden layer")
 @click.option('--eps-decay', default=0.999, help="Epsilon decay factor")

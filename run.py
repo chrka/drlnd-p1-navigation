@@ -33,7 +33,7 @@ def run(env, agent, n_episodes):
 
 @click.command()
 @click.option('--environment', default="Banana.app",
-              help="Path to Unity environmnent")
+              help="Path to Unity environment")
 @click.option('--layer1', default=32, help="Number of units in input layer")
 @click.option('--layer2', default=32, help="Number of units in hidden layer")
 @click.option('--n-episodes', default=3, help="Number of episodes to run")
