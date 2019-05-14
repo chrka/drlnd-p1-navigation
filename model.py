@@ -12,8 +12,8 @@ class QNetwork(nn.Module):
         Args:
             state_size (int): Dimension of each state
             action_size (int): Dimension of each action
-            layer1: Size of input layer
-            layer2: Size of hidden layer
+            layer1: Size of first hidden layer
+            layer2: Size of second hidden layer
         """
         super().__init__()
 
